@@ -1,0 +1,93 @@
+<!-- <div>
+  <input type="file" (change)="onFileSelected($event)">
+    <button (click)="onUpload()">Upload</button>
+</div>
+<div>
+  <button (click)="analyzeLogs()">
+    Analyze
+  </button>
+</div>
+<div>
+  {{logLevelCountPercentage}}
+</div> -->
+<div class="office-background">
+  <header class="fixed-header">
+
+<div class="titleLog">
+  Log Analyzer
+</div>
+  </header>
+  
+  <div class="container mt-5">
+    <div class="row ">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h4>Drag and Drop Your Log File Here</h4>
+          </div>
+          <div class="card-body">
+            <div class="">
+              <!-- <input type="file" name="file" id="file" class="drop-zone__input"> -->
+              <input type="file" class="drop-zone" style="    width: 100%;"  name="file" id="file" (change)="onFileSelected($event)">
+              <!-- <button type="button">Reset</button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div  class="col-md-6 ">
+        <div *ngIf="show" class="card analyzeLogButn" >
+          <div class="card-header  text-white" style="background-color: grey;">
+            <h4>Click below to analyze</h4>
+          </div>
+          <div class="card-body">
+            <div class="">
+              <button class="drop-zone big-button" style="    width: 100%;"  (click)="analyzeLogs()">
+                Analyze Log File
+              </button>            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div *ngIf="showChartAndTable" class="row" style=" margin-top: 2%;">
+      <div class="col-md-6">
+        <div *ngIf="chartOptions" style="width: 500px;background-color: white;">
+          <highcharts-chart
+          [Highcharts]="Highcharts"
+          [options]="chartOptions">
+        </highcharts-chart>
+        </div>
+        
+      </div>
+
+      <div class="col-md-6" >
+        <div style="background-color: white;">
+        <table mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Log Type</th>
+            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+          </ng-container>
+    
+          <ng-container matColumnDef="count">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Count</th>
+            <td mat-cell *matCellDef="let element">{{ element.count }}</td>
+          </ng-container>
+    
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer style="text-align: center;">
+<div style="align-self: center;
+width: 100%;">
+© [2023]. All Rights Reserved. Website developed by [Vikrant Zore] using [Angular 15].
+</div>  </footer>
+
+
+</div>
