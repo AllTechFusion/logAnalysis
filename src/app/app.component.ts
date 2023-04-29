@@ -39,6 +39,11 @@ export class AppComponent implements OnInit{
 
   chartOptions:any;
 
+  logsArrayLines:any;
+  fromTime: string = "";
+  toTime: string = "";
+  filteredLogs: string[] = [];
+
   ngOnInit() {
   
   }
@@ -81,7 +86,8 @@ export class AppComponent implements OnInit{
       };
       result.push(json);
     }
-
+ //console.log(lines)
+ this.logsArrayLines=lines;
     this.logLevelCountPercentage=this.calculateEachLogs(result);
     this.initializeLogPercentageChart();
     this.initializeLogContTable(this.logLevelCount);
@@ -174,5 +180,21 @@ export class AppComponent implements OnInit{
     return percentages
   }
 
+
+
+  //to display searched content
+
+    searchLogsBetweenTimeRange() {
+      this.filteredLogs = this.logsArrayLines.filter((log: string) => {
+        if ((log==null && log=="" && log==undefined)) {
+          return false;
+        }
+        const logTime = log.split(' ')[0] + ' ' + log.split(' ')[1].split(',')[0];
+        return logTime >= this.fromTime && logTime <= this.toTime;
+      
+      });
+//console.log(" this.filteredLogs ",this.filteredLogs )
+    }
+  
 
 }

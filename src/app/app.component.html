@@ -81,11 +81,44 @@
       </div>
       </div>
     </div>
+
+    <div *ngIf="showChartAndTable" class="row">
+      <div class="col-md-4">
+        <label  class="fromToDateLabel" for="from-time">From:</label>
+        <input  class="fromToDate" type="text" id="from-time" [(ngModel)]="fromTime" placeholder="yyyy-MM-dd HH:mm:ss">
+      </div>
+      <div class="col-md-4">
+        <label class="fromToDateLabel" for="to-time">To:</label>
+        <input class="fromToDate" type="text" id="to-time" [(ngModel)]="toTime" placeholder="yyyy-MM-dd HH:mm:ss">
+      </div>
+      <div style="    padding-top: 2%;"  class="col-md-4"><button style="    width: 100%;" type="button" class="btn btn-primary btn-block" (click)="searchLogsBetweenTimeRange()">Search Log</button></div>
+      
+    </div>
+
+
+
+    <div *ngIf="showChartAndTable" class="row" style="    margin-bottom: 4%;
+    background-color: white;">
+
+      <!-- <div class="content">
+        <ul>
+          <li *ngFor="let content of contentArray">{{ content }}</li>
+        </ul>
+      </div>
+    </div> -->
+    <div class="logs-container content">
+      <div class="logs-heading">Logs</div>
+      <div class="logs-body">
+        <div *ngFor="let log of filteredLogs" class="log">
+          <span>{{log}}</span>
+        </div>
+      </div>
+    </div>
   </div>
   
   <footer style="text-align: center;">
 <div style="align-self: center;
-width: 100%;">
+width: 100%; padding-top: 1%;">
 © [2023]. All Rights Reserved. Website developed by [Vikrant Zore] using [Angular 15].
 </div>  </footer>
 

@@ -104,3 +104,64 @@ footer {
   height: 50px;
   background-color: #6495ED;
 }
+
+//*******************************************searchLog***************************
+
+.content {
+  max-height: 600px; /* set the maximum height of the container */
+  overflow-y: auto; /* enable vertical scrolling */
+  margin-bottom: 3%;
+}
+
+
+.logs-container {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.logs-heading {
+  padding: 10px;
+  background-color: #2196f3;
+  color: #fff;
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center;
+}
+
+.logs-body {
+  flex: 1;
+  overflow: auto;
+  padding: 10px;
+}
+
+.log {
+  margin-bottom: 10px;
+}
+
+.log-timestamp {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.log-message {
+  white-space: pre-wrap;
+}
+
+
+.fromToDate {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 16px;
+  width: 100%;
+  font-size: 16px;
+}
+
+.fromToDateLabel {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
