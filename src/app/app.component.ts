@@ -42,7 +42,7 @@ export class AppComponent implements OnInit{
   logsArrayLines:any;
   fromTime: string = "";
   toTime: string = "";
-  filteredLogs: string[] = [];
+  filteredLogs: any[] = [];
 
   ngOnInit() {
   
@@ -74,20 +74,53 @@ export class AppComponent implements OnInit{
     const lines = this.fileContents.split("\n");
     const result = [];
 
+    // for (const line of lines) {
+    //   const [date, time, logLevel, thread, ...messageParts] = line.split(" ");
+    //   const message = messageParts.join(" ");
+    //   const json = {
+    //     date,
+    //     time,
+    //     logLevel,
+    //     thread,
+    //     message
+    //   };
+    //   result.push(json);
+    // }
+    let currentLog = '';
+console.log(lines)
     for (const line of lines) {
-      const [date, time, logLevel, thread, ...messageParts] = line.split(" ");
+      // check if the line is a new log entry
+      if (line.match(/^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2},\d{3}/)) {
+        // if there was a previous log entry, add it to the result array
+        if (currentLog !== '') {
+          result.push(parseLog(currentLog));
+        }
+        currentLog = line;
+      } else {
+        currentLog += '\n' + line;
+      }
+    }
+    
+    // add the last log entry to the result array
+    if (currentLog !== '') {
+      result.push(parseLog(currentLog));
+    }
+    
+    function parseLog(logLine:any) {
+      const [date, time, logLevel, thread, ...messageParts] = logLine.split(" ");
       const message = messageParts.join(" ");
-      const json = {
+      return {
         date,
         time,
         logLevel,
         thread,
         message
       };
-      result.push(json);
     }
- //console.log(lines)
- this.logsArrayLines=lines;
+    
+    // the result array will contain an object for each log entry
+    console.log(result);
+ this.logsArrayLines=result;
     this.logLevelCountPercentage=this.calculateEachLogs(result);
     this.initializeLogPercentageChart();
     this.initializeLogContTable(this.logLevelCount);
@@ -185,15 +218,16 @@ export class AppComponent implements OnInit{
   //to display searched content
 
     searchLogsBetweenTimeRange() {
-      this.filteredLogs = this.logsArrayLines.filter((log: string) => {
+      this.filteredLogs = this.logsArrayLines.filter((log: any) => {
         if ((log==null && log=="" && log==undefined)) {
           return false;
         }
-        const logTime = log.split(' ')[0] + ' ' + log.split(' ')[1].split(',')[0];
+        const logTime = log.date+" "+log.time.split(",")[0];
         return logTime >= this.fromTime && logTime <= this.toTime;
       
       });
-//console.log(" this.filteredLogs ",this.filteredLogs )
+
+console.log(" this.filteredLogs ",this.filteredLogs )
     }
   
 

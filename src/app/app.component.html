@@ -23,7 +23,8 @@
       <div class="col-md-6">
         <div class="card">
           <div class="card-header bg-primary text-white">
-            <h4>Drag and Drop Your Log File Here</h4>
+            <h4>Drag and Drop Your Log File Here Note:File should be <span style="    font-weight: 800;
+              color: yellow;">txt format</span></h4>
           </div>
           <div class="card-body">
             <div class="">
@@ -110,7 +111,7 @@
       <div class="logs-heading">Logs</div>
       <div class="logs-body">
         <div *ngFor="let log of filteredLogs" class="log">
-          <span>{{log}}</span>
+          <span>{{log.date+ " "+log.time+ " "+log.logLevel+ " "+log.thread+ " "+log.message}}</span>
         </div>
       </div>
     </div>
