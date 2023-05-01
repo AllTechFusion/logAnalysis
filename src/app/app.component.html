@@ -111,7 +111,7 @@
       <div class="logs-heading">Logs</div>
       <div class="logs-body">
         <div *ngFor="let log of filteredLogs" class="log">
-          <span>{{log.date+ " "+log.time+ " "+log.logLevel+ " "+log.thread+ " "+log.message}}</span>
+          <span [ngStyle]="{'color': getFontColor(log.logLevel)}">{{log.date+ " "+log.time+ " "+log.logLevel+ " "+log.thread+ " "+log.message}}</span>
         </div>
       </div>
     </div>

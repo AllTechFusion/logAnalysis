@@ -230,5 +230,11 @@ console.log(lines)
 console.log(" this.filteredLogs ",this.filteredLogs )
     }
   
-
+    getFontColor(logLevelC:any){
+      if(logLevelC=="ERROR"){
+        return 'red'
+      }
+      else
+      return '#212529'  
+    }
 }
