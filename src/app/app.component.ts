@@ -10,6 +10,9 @@ import { MatTableDataSource } from '@angular/material/table';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit{
+  globalSearchInput:any
+  selectedLogTypeDrpdown:any;
+  logTypeDrpdownOptions:any
   Highcharts = Highcharts;
   isFixedHeader = false;
   show: boolean = false;
@@ -27,7 +30,7 @@ export class AppComponent implements OnInit{
   fileContents: any;
   lines!: string[];
   logLevelCountPercentage: any;
-
+finalFilteredLogs:any
 
   displayedColumns = ['name', 'count'];
   dataSource!: MatTableDataSource<any>;
@@ -45,7 +48,7 @@ export class AppComponent implements OnInit{
   filteredLogs: any[] = [];
 
   ngOnInit() {
-  
+  this.logTypeDrpdownOptions=['','FINE','FINER','ERROR','DEBUG','WARN','INFO','TRACE','FATAL']
   }
   
   onFileSelected(event: any): void {
@@ -66,10 +69,15 @@ export class AppComponent implements OnInit{
     };
     reader.readAsText(this.selectedFile);
     this.show = true;
+    // this.analyzeLogs();
   }
 
   //Main method
-  analyzeLogs() {
+  analyzeLogsOnUpload() {
+    this.analyzeLogs();
+  }
+
+    analyzeLogs() {
 
     const lines = this.fileContents.split("\n");
     const result = [];
@@ -119,7 +127,7 @@ console.log(lines)
     }
     
     // the result array will contain an object for each log entry
-    console.log(result);
+    console.log("result",result);
  this.logsArrayLines=result;
     this.logLevelCountPercentage=this.calculateEachLogs(result);
     this.initializeLogPercentageChart();
@@ -218,6 +226,8 @@ console.log(lines)
   //to display searched content
 
     searchLogsBetweenTimeRange() {
+      console.log("selectedrpdwn",this.selectedLogTypeDrpdown,this.globalSearchInput,this.checkNullOrUndefined(this.fromTime),this.toTime)
+      
       this.filteredLogs = this.logsArrayLines.filter((log: any) => {
         if ((log==null && log=="" && log==undefined)) {
           return false;
@@ -226,15 +236,82 @@ console.log(lines)
         return logTime >= this.fromTime && logTime <= this.toTime;
       
       });
+    
+   
 
-console.log(" this.filteredLogs ",this.filteredLogs )
+
     }
   
+searchLogs(){
+    this.filteredLogs = this.logsArrayLines;
+  if(this.checkNullOrUndefined(this.fromTime) && this.checkNullOrUndefined(this.toTime)){
+this.searchLogsBetweenTimeRange();
+   if(this.checkNullOrUndefined(this.selectedLogTypeDrpdown)){
+this.filterByFilterType();
+  if(this.checkNullOrUndefined(this.globalSearchInput)){
+    this.filterByInputText();
+  }
+
+  console.log("this.filteredLogs log type and input ",this.filteredLogs)
+   }
+   else{
+    if(this.checkNullOrUndefined(this.globalSearchInput)){
+      this.filterByInputText();
+    }
+   }
+  
+
+
+  }
+  else{
+    if(this.checkNullOrUndefined(this.selectedLogTypeDrpdown)){
+      this.filterByFilterType();
+        if(this.checkNullOrUndefined(this.globalSearchInput)){
+          this.filterByInputText();
+        }
+      
+         }
+         else{
+          if(this.checkNullOrUndefined(this.globalSearchInput)){
+            this.filterByInputText();
+          }
+         }
+         console.log("this.filteredLogs log type and input ",this.filteredLogs)
+
+  }
+ 
+  
+
+}
+
+filterByInputText(){
+  
+    this.filteredLogs = this.filteredLogs.filter(log => {
+      const concatenatedValue = `${log.date} ${log.time} ${log.logLevel} ${log.thread} ${log.message}`; // Add other keys as needed
+      return concatenatedValue.toLowerCase().includes(this.globalSearchInput.toLowerCase());
+    });
+  
+}
+
+filterByFilterType(){
+  this.filteredLogs = this.filteredLogs.filter((log) => {
+    return log.logLevel === this.selectedLogTypeDrpdown;
+});
+}
     getFontColor(logLevelC:any){
       if(logLevelC=="ERROR"){
         return 'red'
       }
       else
       return '#212529'  
+    }
+
+    checkNullOrUndefined(myValue: any){
+      if (myValue !== null && myValue !== undefined && myValue !== '' ) {
+      return true
+      }
+      else{
+        return false
+      }
     }
 }
