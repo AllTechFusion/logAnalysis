@@ -39,12 +39,12 @@
       <div  class="col-md-6 ">
         <div *ngIf="show" class="card analyzeLogButn" >
           <div class="card-header  text-white" style="background-color: grey;">
-            <h4>Click below to analyze</h4>
+            <h4>Observe logs below</h4>
           </div>
           <div class="card-body">
             <div class="">
-              <button class="drop-zone big-button" style="    width: 100%;"  (click)="analyzeLogsOnUpload()">
-                Analyze Log File
+              <button class="drop-zone big-button" style="    width: 100%;" >
+                Check Logs Below
               </button>            </div>
           </div>
         </div>
@@ -129,7 +129,10 @@
       </div>
     </div> -->
     <div class="logs-container content">
-      <div class="logs-heading">Logs</div>
+      <div class="logs-heading">Logs
+        <button class="copyLogsBtn" (click)="copyLogs()">Copy</button> <!-- Add the copy button -->
+      </div>
+      
       <div class="logs-body">
         <div *ngFor="let log of filteredLogs" class="log">
           <span [ngStyle]="{'color': getFontColor(log.logLevel)}">{{log.date+ " "+log.time+ " "+log.logLevel+ " "+log.thread+ " "+log.message}}</span>

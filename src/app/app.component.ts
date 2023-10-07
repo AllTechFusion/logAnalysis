@@ -60,16 +60,18 @@ finalFilteredLogs:any
   }
 
   onUpload(): void {
+    this.filteredLogs=[];
     const reader = new FileReader();
     reader.onload = (e) => {
       if (reader.result) {
         this.fileContents = reader.result.toString();
         this.lines = this.fileContents.split('\n');
+        this.analyzeLogs();
       }
     };
     reader.readAsText(this.selectedFile);
     this.show = true;
-    // this.analyzeLogs();
+    
   }
 
   //Main method
@@ -225,26 +227,10 @@ console.log(lines)
 
   //to display searched content
 
-    searchLogsBetweenTimeRange() {
-      console.log("selectedrpdwn",this.selectedLogTypeDrpdown,this.globalSearchInput,this.checkNullOrUndefined(this.fromTime),this.toTime)
-      
-      this.filteredLogs = this.logsArrayLines.filter((log: any) => {
-        if ((log==null && log=="" && log==undefined)) {
-          return false;
-        }
-        const logTime = log.date+" "+log.time.split(",")[0];
-        return logTime >= this.fromTime && logTime <= this.toTime;
-      
-      });
-    
-   
-
-
-    }
   
 searchLogs(){
     this.filteredLogs = this.logsArrayLines;
-  if(this.checkNullOrUndefined(this.fromTime) && this.checkNullOrUndefined(this.toTime)){
+  if(this.checkNullOrUndefined(this.fromTime) || this.checkNullOrUndefined(this.toTime)){
 this.searchLogsBetweenTimeRange();
    if(this.checkNullOrUndefined(this.selectedLogTypeDrpdown)){
 this.filterByFilterType();
@@ -284,6 +270,42 @@ this.filterByFilterType();
 
 }
 
+
+    searchLogsBetweenTimeRange() {
+      console.log("selectedrpdwn",this.selectedLogTypeDrpdown,this.globalSearchInput,this.checkNullOrUndefined(this.fromTime),this.toTime)
+      if(!this.checkNullOrUndefined(this.fromTime)){
+
+      }
+      // this.filteredLogs = this.logsArrayLines.filter((log: any) => {
+      //   if ((log==null && log=="" && log==undefined)) {
+      //     return false;
+      //   }
+      //   const logTime = log.date+" "+log.time.split(",")[0];
+      //   return logTime >= this.fromTime && logTime <= this.toTime;
+      
+      // });
+      this.filteredLogs = this.logsArrayLines.filter((log: any, index: number) => {
+        if ((log==null && log=="" && log==undefined)) {
+            return false;
+        }
+        const logTime = log.date+" "+log.time.split(",")[0];
+        
+        if (!this.fromTime) {
+            this.fromTime = logTime; // Set fromTime if it's not provided
+        }
+    
+        if (!this.toTime && index === this.logsArrayLines.length - 1) {
+            return true; // Return all data after fromDate if toTime is not provided
+        }
+    
+        return logTime >= this.fromTime && (!this.toTime || logTime <= this.toTime);
+    });
+    
+   
+
+
+    }
+
 filterByInputText(){
   
     this.filteredLogs = this.filteredLogs.filter(log => {
@@ -306,6 +328,7 @@ filterByFilterType(){
       return '#212529'  
     }
 
+    //return true if not null
     checkNullOrUndefined(myValue: any){
       if (myValue !== null && myValue !== undefined && myValue !== '' ) {
       return true
@@ -314,4 +337,20 @@ filterByFilterType(){
         return false
       }
     }
+
+    copyLogs() {
+      const logsContainer = document.querySelector('.logs-body'); // Get the logs container element
+      const selection = window.getSelection(); // Get the selection object
+  
+      if (selection && logsContainer) {
+          const range = document.createRange(); // Create a range object
+          
+          range.selectNode(logsContainer); // Set the range to select the container
+  
+          selection.removeAllRanges(); // Clear any existing selection
+          selection.addRange(range); // Add the range to the selection
+          document.execCommand('copy'); // Execute the copy command
+          selection.removeAllRanges(); // Clear the selection again
+      }
+  }
 }
