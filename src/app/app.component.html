@@ -10,6 +10,7 @@
 <div>
   {{logLevelCountPercentage}}
 </div> -->
+
 <div class="office-background">
   <header class="fixed-header">
 
@@ -17,7 +18,9 @@
   Log Analyzer
 </div>
   </header>
-  
+  <div class="loader-overlay" *ngIf="loading">
+    <div class="loader"></div>
+  </div>
   <div class="container mt-5 mb-5">
     <div class="row ">
       <div class="col-md-6">
@@ -39,13 +42,13 @@
       <div  class="col-md-6 ">
         <div *ngIf="show" class="card analyzeLogButn" >
           <div class="card-header  text-white" style="background-color: grey;">
-            <h4>Observe logs below</h4>
+            <h4>Click here to view Log Visualisation</h4>
           </div>
           <div class="card-body">
             <div class="">
-              <button class="drop-zone big-button" style="    width: 100%;" >
-                Check Logs Below
-              </button>            </div>
+              <button class="drop-zone big-button" style="    width: 100%;" (click)="displayGraph_Presentation()">
+                Click here for Graphical View
+              </button >            </div>
           </div>
         </div>
       </div>
@@ -83,7 +86,7 @@
       </div>
     </div>
 
-    <div *ngIf="showChartAndTable" class="row">
+    <div *ngIf="showSearchCriteria" class="row">
       <div class="col-md-4">
         <label  class="fromToDateLabel" for="from-time">From:</label>
         <input  class="fromToDate" type="text" id="from-time" [(ngModel)]="fromTime" placeholder="yyyy-MM-dd HH:mm:ss">

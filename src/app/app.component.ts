@@ -17,6 +17,9 @@ export class AppComponent implements OnInit{
   isFixedHeader = false;
   show: boolean = false;
   chart: any;
+  showSearchCriteria: boolean=false;
+  loading: boolean = false;
+
   @HostListener('window:scroll', ['$event'])
   onScroll(event: any) {
     const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
@@ -52,6 +55,7 @@ finalFilteredLogs:any
   }
   
   onFileSelected(event: any): void {
+    this.loading = true;
     this.selectedFile = event.target.files[0];
     this.onUpload();
 
@@ -67,6 +71,11 @@ finalFilteredLogs:any
         this.fileContents = reader.result.toString();
         this.lines = this.fileContents.split('\n');
         this.analyzeLogs();
+        this.loading = false; // Hide the loader once analyzeLogs is completed
+        // setTimeout(() => {
+        //   this.analyzeLogs();
+        //   this.loading = false; // Hide the loader once analyzeLogs is completed
+        // }, 1000); 
       }
     };
     reader.readAsText(this.selectedFile);
@@ -97,7 +106,7 @@ finalFilteredLogs:any
     //   result.push(json);
     // }
     let currentLog = '';
-console.log(lines)
+// console.log(lines)
     for (const line of lines) {
       // check if the line is a new log entry
       if (line.match(/^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2},\d{3}/)) {
@@ -129,17 +138,24 @@ console.log(lines)
     }
     
     // the result array will contain an object for each log entry
-    console.log("result",result);
+    // console.log("result",result);
  this.logsArrayLines=result;
     this.logLevelCountPercentage=this.calculateEachLogs(result);
-    this.initializeLogPercentageChart();
-    this.initializeLogContTable(this.logLevelCount);
-    this.showChartAndTable=true;
+   this.showSearchCriteria=true;
  //   this.chartOptions.series.data=Object.entries(this.logLevelCountPercentage).map(([key, value]) => [key, value]);
   //  console.log("chartOptions",this.chartOptions.series.data)
      
 
   }
+
+  displayGraph_Presentation(){
+    this.loading=true;
+    this.initializeLogPercentageChart();
+    this.initializeLogContTable(this.logLevelCount);
+    this.showChartAndTable=true;
+    this.loading=false;
+  }
+
   initializeLogPercentageChart() {
  // Initialize the chart options
  this.chartOptions = {
@@ -229,6 +245,7 @@ console.log(lines)
 
   
 searchLogs(){
+  this.loading=true;
     this.filteredLogs = this.logsArrayLines;
   if(this.checkNullOrUndefined(this.fromTime) || this.checkNullOrUndefined(this.toTime)){
 this.searchLogsBetweenTimeRange();
@@ -238,7 +255,7 @@ this.filterByFilterType();
     this.filterByInputText();
   }
 
-  console.log("this.filteredLogs log type and input ",this.filteredLogs)
+  // console.log("this.filteredLogs log type and input ",this.filteredLogs)
    }
    else{
     if(this.checkNullOrUndefined(this.globalSearchInput)){
@@ -262,17 +279,17 @@ this.filterByFilterType();
             this.filterByInputText();
           }
          }
-         console.log("this.filteredLogs log type and input ",this.filteredLogs)
+        //  console.log("this.filteredLogs log type and input ",this.filteredLogs)
 
   }
  
-  
+  this.loading=false;
 
 }
 
 
     searchLogsBetweenTimeRange() {
-      console.log("selectedrpdwn",this.selectedLogTypeDrpdown,this.globalSearchInput,this.checkNullOrUndefined(this.fromTime),this.toTime)
+      // console.log("selectedrpdwn",this.selectedLogTypeDrpdown,this.globalSearchInput,this.checkNullOrUndefined(this.fromTime),this.toTime)
       if(!this.checkNullOrUndefined(this.fromTime)){
 
       }
