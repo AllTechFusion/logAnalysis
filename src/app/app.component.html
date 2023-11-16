@@ -18,10 +18,16 @@
   Log Analyzer
 </div>
   </header>
-  <div class="loader-overlay" *ngIf="loading">
+
+  <div class="scrolling-text-container">
+    <div class="scrolling-text">
+      After uploading a file, please wait until the filter option becomes visible.
+    </div>
+</div>
+  <!-- <div class="loader-overlay" *ngIf="loading">
     <div class="loader"></div>
-  </div>
-  <div class="container mt-5 mb-5">
+  </div> -->
+  <div class="container  mb-5">
     <div class="row ">
       <div class="col-md-6">
         <div class="card">
@@ -96,7 +102,7 @@
         <input class="fromToDate" type="text" id="to-time" [(ngModel)]="toTime" placeholder="yyyy-MM-dd HH:mm:ss">
       </div>
       
-      <div class="col-md-4">
+      <!-- <div class="col-md-4">
         <div>
           <label class="fromToDateLabel" for="to-time">Log Type</label>
           <select style="width: 100%;
@@ -107,6 +113,18 @@
           </select>
         </div>
         
+      </div> -->
+
+      <div class="col-md-4">
+        <div class="row">
+          <label class="fromToDateLabel">Log Types</label>
+          <div *ngFor="let option of logTypeDrpdownOptions" class="col-3">
+            <label>
+              <input type="checkbox" [(ngModel)]="option.checked" />
+              {{ option.name }}
+            </label>
+          </div>
+        </div>
       </div>
 
       <div class="col-md-10 offset-md-1">
@@ -122,7 +140,7 @@
 
 
 
-    <div *ngIf="showChartAndTable" class="row" style="    margin-bottom: 4%;
+    <div *ngIf="showSearchCriteria" class="row" style="    margin-bottom: 4%;
     background-color: white;">
 
       <!-- <div class="content">

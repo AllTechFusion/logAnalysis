@@ -56,7 +56,7 @@
     border-bottom: 1px solid #ccc;
   }
   .container{
-    padding-top: 5%;
+    padding-top: 1%;
     flex: 1;
   }
 
@@ -201,4 +201,30 @@ footer {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+
+//for scrolling text
+@keyframes scroll {
+  0% {
+      transform: translateX(100%);
+  }
+  100% {
+      transform: translateX(-100%);
+  }
+}
+
+.scrolling-text {
+  white-space: nowrap;
+  overflow: hidden;
+  animation: scroll 15s linear infinite;
+  color: mediumvioletred;
+  font-size: 16px;
+
+}
+
+.scrolling-text-container {
+  width: 100%;
+  overflow: hidden;
+  margin-top: 4%;
 }

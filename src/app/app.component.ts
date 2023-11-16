@@ -51,7 +51,29 @@ finalFilteredLogs:any
   filteredLogs: any[] = [];
 
   ngOnInit() {
-  this.logTypeDrpdownOptions=['','FINE','FINER','ERROR','DEBUG','WARN','INFO','TRACE','FATAL']
+  //this.logTypeDrpdownOptions=['','FINE','FINER','ERROR','DEBUG','WARN','INFO','TRACE','FATAL']
+  this.logTypeDrpdownOptions = [
+    { name: 'FINE', checked: false },
+    { name: 'FINER', checked: false },
+    { name: 'ERROR', checked: false },
+    { name: 'DEBUG', checked: false },
+    { name: 'WARN', checked: false },
+    { name: 'INFO', checked: false },
+    { name: 'TRACE', checked: false },
+    { name: 'FATAL', checked: false },
+  ];
+  }
+  
+  getSelectedLogTypes() {
+    const selectedLogTypes = this.logTypeDrpdownOptions
+      .filter((option: { checked: any; }) => option.checked)
+      .map((option: { name: any; }) => option.name);
+  
+    this.selectedLogTypeDrpdown = selectedLogTypes.length > 0 ? selectedLogTypes : undefined;
+  console.log("this.selectedLogTypeDrpdown ",this.selectedLogTypeDrpdown )
+  
+  
+
   }
   
   onFileSelected(event: any): void {
@@ -149,11 +171,11 @@ finalFilteredLogs:any
   }
 
   displayGraph_Presentation(){
-    this.loading=true;
+    // this.loading=true;
     this.initializeLogPercentageChart();
     this.initializeLogContTable(this.logLevelCount);
     this.showChartAndTable=true;
-    this.loading=false;
+    // this.loading=false;
   }
 
   initializeLogPercentageChart() {
@@ -245,7 +267,8 @@ finalFilteredLogs:any
 
   
 searchLogs(){
-  this.loading=true;
+  // this.loading=true;
+  this.getSelectedLogTypes();
     this.filteredLogs = this.logsArrayLines;
   if(this.checkNullOrUndefined(this.fromTime) || this.checkNullOrUndefined(this.toTime)){
 this.searchLogsBetweenTimeRange();
@@ -283,7 +306,7 @@ this.filterByFilterType();
 
   }
  
-  this.loading=false;
+  // this.loading=false;
 
 }
 
@@ -332,10 +355,18 @@ filterByInputText(){
   
 }
 
-filterByFilterType(){
-  this.filteredLogs = this.filteredLogs.filter((log) => {
-    return log.logLevel === this.selectedLogTypeDrpdown;
-});
+// filterByFilterType(){
+//   this.filteredLogs = this.filteredLogs.filter((log) => {
+//     return log.logLevel === this.selectedLogTypeDrpdown;
+// });
+// }
+
+filterByFilterType() {
+  if (this.selectedLogTypeDrpdown && this.selectedLogTypeDrpdown.length > 0) {
+    this.filteredLogs = this.filteredLogs.filter((log) => {
+      return this.selectedLogTypeDrpdown.includes(log.logLevel);
+    });
+  }
 }
     getFontColor(logLevelC:any){
       if(logLevelC=="ERROR"){
